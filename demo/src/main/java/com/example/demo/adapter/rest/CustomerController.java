@@ -2,6 +2,9 @@ package com.example.demo.adapter.rest;
 
 import com.example.demo.application.CustomerService;
 import com.example.demo.domain.entity.Customer;
+import com.example.demo.domain.entity.CustomerDTO;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +13,9 @@ import java.util.List;
 @RequestMapping("/customers")
 public class CustomerController {
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
@@ -17,8 +23,8 @@ public class CustomerController {
     }
 
     @PostMapping("/createCustomer")
-    public Customer createCustomer(@RequestBody Customer customer) throws Exception {
-        return customerService.createCustomer(customer);
+    public CustomerDTO createCustomer(@RequestBody Customer customer) throws Exception {
+        return modelMapper.map(customerService.createCustomer(customer), CustomerDTO.class);
     }
 
     @DeleteMapping("/deleteCustomer")
@@ -27,13 +33,13 @@ public class CustomerController {
     }
 
     @GetMapping("/getCustomer")
-    public Customer getCustomer(@RequestParam Long id) throws Exception{
-        return customerService.getCustomer(id);
+    public CustomerDTO getCustomer(@RequestParam Long id) throws Exception{
+        return modelMapper.map(customerService.getCustomer(id), CustomerDTO.class);
     }
 
     @PutMapping("/updateCustomer")
-    public Customer updateCustomer(@RequestBody Customer customer) throws Exception{
-        return customerService.updateCustomer(customer);
+    public CustomerDTO updateCustomer(@RequestBody Customer customer) throws Exception{
+        return modelMapper.map(customerService.updateCustomer(customer), CustomerDTO.class);
     }
 
     @GetMapping("/getAllCustomers")
