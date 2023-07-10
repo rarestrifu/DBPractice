@@ -44,11 +44,12 @@ public class CustomerService implements CustomerInterface{
         throw new CustomerExistsException("Customer already exists");
     }
 
-    public void deleteCustomer(Long id) throws Exception {
+    public void deleteCustomer(Long id) throws CustomerDoesntExistException {
         if(customerRepositoryInterface.existsById(id)){
             addressRepositoryInterface.delete(customerRepositoryInterface.findById(id).get().getAddress());
             customerRepositoryInterface.delete(customerRepositoryInterface.findById(id).get());
         }
+        throw new CustomerDoesntExistException("Customer doesn't exist");
     }
 
     @Override
