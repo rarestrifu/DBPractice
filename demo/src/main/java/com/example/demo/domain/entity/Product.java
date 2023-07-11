@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,12 +37,9 @@ public class Product {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "products_orders",
-            joinColumns = {
-                    @JoinColumn(name = "product_id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "order_id")
-            }
+            joinColumns = { @JoinColumn(name = "product_id") },
+            inverseJoinColumns = { @JoinColumn(name = "order_id") }
     )
+    @Column(name = "orders")
     private List<Order> orders = new ArrayList<>();
 }
