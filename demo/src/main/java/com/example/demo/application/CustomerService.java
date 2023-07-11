@@ -1,7 +1,6 @@
 package com.example.demo.application;
 
 import com.example.demo.domain.entity.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,18 +12,24 @@ public class CustomerService implements CustomerInterface{
 
     private final AddressRepositoryInterface addressRepositoryInterface;
 
-    public CustomerService(CustomerRepositoryInterface customerRepositoryInterface, AddressRepositoryInterface addressRepositoryInterface) {
+    private final ProductRepositoryInterface productRepositoryInterface;
+
+    public CustomerService(CustomerRepositoryInterface customerRepositoryInterface, AddressRepositoryInterface addressRepositoryInterface, ProductRepositoryInterface productRepositoryInterface) {
         this.customerRepositoryInterface = customerRepositoryInterface;
         this.addressRepositoryInterface = addressRepositoryInterface;
+        this.productRepositoryInterface = productRepositoryInterface;
     }
 
     @Override
     public Customer createCustomer(Customer customer) throws CustomerExistsException {
-        if(!customerRepositoryInterface.existsById(customer.getId())){
-            addressRepositoryInterface.save(customer.getAddress());
-            return customerRepositoryInterface.save(customer);
+        customerRepositoryInterface.save(customer);
+        for (Product product: customer.getProducts()) {
+            product.setCustomer(customer);
+            productRepositoryInterface.save(product);
         }
-        throw new CustomerExistsException("Customer already exists");
+        addressRepositoryInterface.save(customer.getAddress());
+        productRepositoryInterface.saveAll(customer.getProducts());
+        return customerRepositoryInterface.save(customer);
     }
 
     @Override
@@ -58,5 +63,16 @@ public class CustomerService implements CustomerInterface{
             return customerRepositoryInterface.findAll();
         }
         throw new CustomerDoesntExistException("No customer found");
+    }
+
+    @Override
+    public Customer addProductsToCustomer(Long id, Product product) throws Exception {
+        if(customerRepositoryInterface.existsById(id)){
+            customerRepositoryInterface.findById(id).get().getProducts().add(product);
+            product.setCustomer(customerRepositoryInterface.findById(id).get());
+            productRepositoryInterface.save(product);
+            return customerRepositoryInterface.findById(id).get();
+        }
+        throw new CustomerDoesntExistException("no id found");
     }
 }

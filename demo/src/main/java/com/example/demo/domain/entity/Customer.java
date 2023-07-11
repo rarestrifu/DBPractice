@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +22,9 @@ public class Customer {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "customer_name")
+    private String name;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
@@ -30,5 +34,9 @@ public class Customer {
 
     @Column(name = "email")
     private String email;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @Column(name = "products")
+    private List<Product> products;
 
 }

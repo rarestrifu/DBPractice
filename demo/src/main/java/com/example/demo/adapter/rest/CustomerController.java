@@ -3,6 +3,7 @@ package com.example.demo.adapter.rest;
 import com.example.demo.application.CustomerService;
 import com.example.demo.domain.entity.Customer;
 import com.example.demo.domain.entity.CustomerDTO;
+import com.example.demo.domain.entity.Product;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,5 +46,10 @@ public class CustomerController {
     @GetMapping("/getAllCustomers")
     public List<Customer> getAllCustomers() throws Exception{
         return customerService.getAllCustomers();
+    }
+
+    @PutMapping("/addProducts/{customerID}")
+    public CustomerDTO addProductsToCustomer(@PathVariable(value = "customerID") Long id, @RequestBody Product product) throws Exception {
+        return modelMapper.map(customerService.addProductsToCustomer(id, product), CustomerDTO.class);
     }
 }
