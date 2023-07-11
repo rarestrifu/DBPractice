@@ -12,5 +12,5 @@ public class CustomerDTO {
     private Address address;
     private Date dateOfBirth;
     private String email;
-    private List<Product> products;
+    private List<ProductDTO> products;
 }

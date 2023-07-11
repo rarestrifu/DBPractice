@@ -9,4 +9,6 @@ public interface ProductInterface {
     public Product getProductById(Long id) throws Exception;
 
     public List<Product> getProductsByCustomerId(Long id) throws Exception;
+
+    public Product updateProductById(Long id, Product product) throws Exception;
 }

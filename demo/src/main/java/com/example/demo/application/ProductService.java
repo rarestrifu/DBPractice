@@ -1,11 +1,7 @@
 package com.example.demo.application;
 
-import com.example.demo.domain.entity.CustomerDoesntExistException;
-import com.example.demo.domain.entity.CustomerRepositoryInterface;
-import com.example.demo.domain.entity.Product;
-import com.example.demo.domain.entity.ProductRepositoryInterface;
+import com.example.demo.domain.entity.*;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,14 +32,23 @@ public class ProductService implements ProductInterface{
         throw new CustomerDoesntExistException("no id found");
     }
 
-    public void deleteProductByCustomerId(Long productID, Long customerID){
-        if(customerRepositoryInterface.existsById(customerID)){
-            for(Product product: customerRepositoryInterface.findById(customerID).get().getProducts()){
-                if(product.getId().equals(productID)){
-
-                }
-            }
+    @Override
+    public Product updateProductById(Long id, ProductNameOnlyDTO productNameOnlyDTO) throws Exception {
+        if(productRepositoryInterface.existsById(id)){
+            productRepositoryInterface.save()
         }
+        throw new CustomerDoesntExistException("no id found");
+    }
+
+
+    public ProductDTO deleteProductById(Long productID) throws Exception{
+        if(productRepositoryInterface.existsById(productID)){
+            productRepositoryInterface.deleteById(productID);
+        }
+        else{
+            throw new Exception("Customer doesn't exist");
+        }
+        return null;
     }
 
 }

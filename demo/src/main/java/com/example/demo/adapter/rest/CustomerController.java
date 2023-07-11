@@ -4,10 +4,12 @@ import com.example.demo.application.CustomerService;
 import com.example.demo.domain.entity.Customer;
 import com.example.demo.domain.entity.CustomerDTO;
 import com.example.demo.domain.entity.Product;
+import com.example.demo.domain.entity.ProductDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -44,8 +46,9 @@ public class CustomerController {
     }
 
     @GetMapping("/getAllCustomers")
-    public List<Customer> getAllCustomers() throws Exception{
-        return customerService.getAllCustomers();
+    public List<CustomerDTO> getAllCustomers() throws Exception{
+        return Arrays.asList(modelMapper.map(customerService.getAllCustomers(),
+                CustomerDTO[].class));
     }
 
     @PutMapping("/addProducts/{customerID}")
