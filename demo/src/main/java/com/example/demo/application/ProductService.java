@@ -36,4 +36,14 @@ public class ProductService implements ProductInterface{
         throw new CustomerDoesntExistException("no id found");
     }
 
+    public void deleteProductByCustomerId(Long productID, Long customerID){
+        if(customerRepositoryInterface.existsById(customerID)){
+            for(Product product: customerRepositoryInterface.findById(customerID).get().getProducts()){
+                if(product.getId().equals(productID)){
+
+                }
+            }
+        }
+    }
+
 }
