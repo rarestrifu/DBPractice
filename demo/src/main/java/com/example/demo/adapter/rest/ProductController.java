@@ -38,8 +38,9 @@ public class ProductController {
     }
 
     @PatchMapping("/updateProduct/{id}")
-    public Product updateProductById(@PathVariable(value = "id") Long id) throws Exception {
-
+    public Product updateProductById(@PathVariable(value = "id") Long id,
+                                     @RequestBody ProductUpdateDTO productUpdateDTO) throws Exception {
+        return productService.updateProductById(id, productUpdateDTO);
     }
 
 }

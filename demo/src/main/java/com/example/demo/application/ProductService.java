@@ -1,7 +1,9 @@
 package com.example.demo.application;
 
 import com.example.demo.domain.entity.*;
+import com.example.demo.utils.JsonNullableUtils;
 import lombok.AllArgsConstructor;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,13 +35,16 @@ public class ProductService implements ProductInterface{
     }
 
     @Override
-    public Product updateProductById(Long id, ProductNameOnlyDTO productNameOnlyDTO) throws Exception {
+    public Product updateProductById(Long id, ProductUpdateDTO productUpdateDTO) throws Exception {
         if(productRepositoryInterface.existsById(id)){
-            productRepositoryInterface.save()
-        }
-        throw new CustomerDoesntExistException("no id found");
-    }
+            Product product = productRepositoryInterface.findById(id).get();
+            JsonNullableUtils.changeIfPresent(productUpdateDTO.getName(), product::setName);
+            JsonNullableUtils.changeIfPresent(productUpdateDTO.getPrice(), product::setPrice);
 
+            productRepositoryInterface.save(product);
+        }
+        throw new Exception("patch not working");
+    }
 
     public ProductDTO deleteProductById(Long productID) throws Exception{
         if(productRepositoryInterface.existsById(productID)){
