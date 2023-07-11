@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,4 +32,16 @@ public class Product {
     @JoinColumn(name = "customer_id")
     @JsonIgnore
     private Customer customer;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "products_orders",
+            joinColumns = {
+                    @JoinColumn(name = "product_id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "order_id")
+            }
+    )
+    private List<Order> orders = new ArrayList<>();
 }
