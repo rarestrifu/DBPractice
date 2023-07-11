@@ -41,12 +41,49 @@ public class CustomerService implements CustomerInterface{
     }
 
     @Override
-    public Customer updateCustomer(Customer customer) throws CustomerExistsException {
-        if(customerRepositoryInterface.existsById(customer.getId())){
-            addressRepositoryInterface.save(customer.getAddress());
-            return customerRepositoryInterface.save(customer);
+    public Customer updateCustomer(Long id, CustomerUpdateDTO customerUpdateDTO) throws CustomerExistsException {
+        if(customerRepositoryInterface.existsById(id)){
+            Customer customer = customerRepositoryInterface.findById(id).orElseThrow(
+                    ()->new CustomerExistsException("no id found")
+            );
+            if(customerUpdateDTO.getName()!=null){
+                customer.setName(customerUpdateDTO.getName());
+            }
+            if(customerUpdateDTO.getDateOfBirth()!=null){
+                customer.setDateOfBirth(customerUpdateDTO.getDateOfBirth());
+            }
+            if(customerUpdateDTO.getEmail()!=null){
+                customer.setEmail(customerUpdateDTO.getEmail());
+            }
+            customerRepositoryInterface.save(customer);
+
+            // now saving the address in the customer and the address tables
+
+            if(customerUpdateDTO.getAddress()!=null){
+                Address address = customerRepositoryInterface.findById(id).get().getAddress();
+                if(customerUpdateDTO.getAddress().getCity()!=null){
+                    address.setCity(customerUpdateDTO.getAddress().getCity());
+                }
+                if(customerUpdateDTO.getAddress().getNumber()!=0){
+                    address.setNumber(customerUpdateDTO.getAddress().getNumber());
+                }
+                if(customerUpdateDTO.getAddress().getCountry()!=null){
+                    address.setCountry(customerUpdateDTO.getAddress().getCountry());
+                }
+                if(customerUpdateDTO.getAddress().getPostalCode()!=null){
+                    address.setPostalCode(customerUpdateDTO.getAddress().getPostalCode());
+                }
+                if(customerUpdateDTO.getAddress().getStreet()!=null){
+                    address.setStreet(customerUpdateDTO.getAddress().getStreet());
+                }
+                customerRepositoryInterface.save(customer);
+                addressRepositoryInterface.save(address);
+            }
+
+            return customer;
         }
-        throw new CustomerExistsException("Customer already exists");
+
+        return null;
     }
 
     public void deleteCustomer(Long id) throws CustomerDoesntExistException {

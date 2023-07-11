@@ -1,10 +1,7 @@
 package com.example.demo.adapter.rest;
 
 import com.example.demo.application.CustomerService;
-import com.example.demo.domain.entity.Customer;
-import com.example.demo.domain.entity.CustomerDTO;
-import com.example.demo.domain.entity.Product;
-import com.example.demo.domain.entity.ProductDTO;
+import com.example.demo.domain.entity.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +37,10 @@ public class CustomerController {
         return modelMapper.map(customerService.getCustomer(id), CustomerDTO.class);
     }
 
-    @PutMapping("/updateCustomer")
-    public CustomerDTO updateCustomer(@RequestBody Customer customer) throws Exception{
-        return modelMapper.map(customerService.updateCustomer(customer), CustomerDTO.class);
+    @PatchMapping("/updateCustomer/{id}")
+    public CustomerDTO updateCustomer(@PathVariable(value = "id") Long id,
+                                      @RequestBody CustomerUpdateDTO customerUpdateDTO) throws Exception{
+        return modelMapper.map(customerService.updateCustomer(id, customerUpdateDTO), CustomerDTO.class);
     }
 
     @GetMapping("/getAllCustomers")
@@ -55,4 +53,6 @@ public class CustomerController {
     public CustomerDTO addProductsToCustomer(@PathVariable(value = "customerID") Long id, @RequestBody Product product) throws Exception {
         return modelMapper.map(customerService.addProductsToCustomer(id, product), CustomerDTO.class);
     }
+
+
 }
