@@ -1,9 +1,7 @@
 package com.example.demo.application;
 
 import com.example.demo.domain.entity.*;
-import com.example.demo.utils.JsonNullableUtils;
 import lombok.AllArgsConstructor;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +17,6 @@ public class ProductService implements ProductInterface{
 
     @Override
     public Product getProductById(Long id) throws Exception{
-        //productRepositoryInterface.findById(id).orElseThrow(()-> new Exception("no product found"));
         if(productRepositoryInterface.existsById(id)){
             return productRepositoryInterface.findById(id).get();
         }
