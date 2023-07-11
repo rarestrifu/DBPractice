@@ -7,22 +7,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.openapitools.jackson.nullable.JsonNullable;
 
-@SuppressWarnings("FieldMayBeFinal")
+
 public class ProductUpdateDTO {
-    @NotNull
-    private JsonNullable<String> name = JsonNullable.undefined();
+    private String name;
+    private Integer price;
 
-    @NotNull
-    private JsonNullable<Integer> price = JsonNullable.undefined();
-
-    public JsonNullable<String> getName() {
+    public String getName() {
         return name;
     }
 
-    public JsonNullable<Integer> getPrice() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getPrice() {
         return price;
     }
 
-    public ProductUpdateDTO(){
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 }

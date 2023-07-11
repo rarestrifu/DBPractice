@@ -6,6 +6,7 @@ import com.example.demo.domain.entity.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndViewDefiningException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,16 +32,16 @@ public class ProductController {
                 ProductDTO[].class));
     }
 
-    @DeleteMapping("/deleteProduct/{productID}")
+    @DeleteMapping("/deleteProduct/{productID}") //WORKING
     public void deleteProductByCustomerId(@PathVariable(value = "productID") Long productID)
                                           throws Exception{
         modelMapper.map(productService.deleteProductById(productID),ProductDTO.class);
     }
 
-    @PatchMapping("/updateProduct/{id}")
-    public Product updateProductById(@PathVariable(value = "id") Long id,
+    @PatchMapping("/updateProduct/{id}") //WORKING
+    public ProductDTO updateProductById(@PathVariable(value = "id") Long id,
                                      @RequestBody ProductUpdateDTO productUpdateDTO) throws Exception {
-        return productService.updateProductById(id, productUpdateDTO);
+        return modelMapper.map(productService.updateProductById(id, productUpdateDTO), ProductDTO.class);
     }
 
 }

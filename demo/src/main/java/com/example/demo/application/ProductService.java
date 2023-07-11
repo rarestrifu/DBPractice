@@ -36,14 +36,17 @@ public class ProductService implements ProductInterface{
 
     @Override
     public Product updateProductById(Long id, ProductUpdateDTO productUpdateDTO) throws Exception {
-        if(productRepositoryInterface.existsById(id)){
-            Product product = productRepositoryInterface.findById(id).get();
-            JsonNullableUtils.changeIfPresent(productUpdateDTO.getName(), product::setName);
-            JsonNullableUtils.changeIfPresent(productUpdateDTO.getPrice(), product::setPrice);
-
-            productRepositoryInterface.save(product);
+        if (productRepositoryInterface.existsById(id)) {
+            Product product = productRepositoryInterface.findById(id).orElseThrow(() -> new Exception("Product not found"));
+            if (productUpdateDTO.getName() != null) {
+                product.setName(productUpdateDTO.getName());
+            }
+            if (productUpdateDTO.getPrice() != null) {
+                product.setPrice(productUpdateDTO.getPrice());
+            }
+            return productRepositoryInterface.save(product);
         }
-        throw new Exception("patch not working");
+        throw new Exception("Product not found");
     }
 
     public ProductDTO deleteProductById(Long productID) throws Exception{
